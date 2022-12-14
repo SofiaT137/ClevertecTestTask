@@ -1,4 +1,4 @@
-package by.clevertec.model.entity;
+package by.clevertec.persistence.entity;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
