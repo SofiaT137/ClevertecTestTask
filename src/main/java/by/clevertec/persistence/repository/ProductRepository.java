@@ -1,0 +1,7 @@
+package by.clevertec.persistence.repository;
+
+import by.clevertec.persistence.entity.Product;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ProductRepository extends JpaRepository<Product, Long> {
+}
