@@ -1,5 +1,7 @@
 package by.clevertec.service;
 
-public interface CashReceiptService<T> extends CRUDService<T> {
-    void getCashReceipt(T dto);
+import org.springframework.util.MultiValueMap;
+
+public interface CashReceiptService<T>{
+    T getCashReceipt(MultiValueMap<String, String> mapWithParameters);
 }

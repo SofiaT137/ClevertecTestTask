@@ -3,16 +3,19 @@ package by.clevertec.service.dto;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
-import java.util.Map;
 
 @Data
 @Accessors(chain = true)
 public class CashReceiptDto {
-
-    private Integer cashierId;
-    private Map<ProductDto, Integer> productDtoMap;
-    private List<DiscountCardDto> discountCardDtoList;
-    private LocalDateTime cashReceiptDate;
+    private CashierDto cashierDto;
+    private ShopDto shopDto;
+    private List<CashReceiptItemDto> cashReceiptItemList;
+    private DiscountCardDto discountCardDto;
+    private LocalDate cashReceiptDate;
+    private LocalTime cashReceiptTime;
+    private Double totalDiscountPercent;
+    private Double totalPrice;
 }
