@@ -6,4 +6,5 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("clevertecTestTask/v1/discountCard")
 public class DiscountCardController {
+
 }
