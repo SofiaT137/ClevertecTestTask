@@ -1,8 +1,8 @@
-package by.clevertec.service.fileCreator.impl;
+package by.clevertec.util.fileCreator.impl;
 
 import by.clevertec.service.dto.CashReceiptDto;
 import by.clevertec.service.dto.CashReceiptItemDto;
-import by.clevertec.service.fileCreator.PdfCreator;
+import by.clevertec.util.fileCreator.PdfCreator;
 import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.layout.Document;
@@ -33,7 +33,6 @@ public class PdfCreatorImpl implements PdfCreator<CashReceiptDto> {
     private static final String QUANTITY = "Qty";
     private static final String DATE_AND_TIME = "Date: %s \n Time: %s ";
     private static final String YOUR_DISCOUNT = "Your total discount is ";
-    private static final String CARD_NUMBER = "Card # %d .";
     private static final String CARD_DISCOUNT = "discount percent: ";
     private static final String $_VALUE = "$%s";
     private static final int WIDTH_18 = 18;
@@ -56,17 +55,20 @@ public class PdfCreatorImpl implements PdfCreator<CashReceiptDto> {
         paragraph.add(getIntoAsCenterText(cashReceiptDto.getShopDto().getShopAddress(), TIMES_ROMAN, WIDTH_10));
         paragraph.add(getIntoAsCenterText(cashReceiptDto.getShopDto().getShopPhone(), TIMES_ROMAN, WIDTH_10));
         paragraph.add(getTableWithTwoCells(String.format(CASHIER_ID, cashReceiptDto.getCashierDto().getCashierId()),
-                String.format(DATE_AND_TIME, cashReceiptDto.getCashReceiptDate()
-                        .format(DateTimeFormatter.ofPattern(DATE_REGEX)),
-                        cashReceiptDto.getCashReceiptTime().format(DateTimeFormatter.ofPattern(TIME_REGEX)))
+                String.format(DATE_AND_TIME, cashReceiptDto
+                                        .getCashReceiptDate().format(DateTimeFormatter.ofPattern(DATE_REGEX)),
+                        cashReceiptDto
+                                .getCashReceiptTime()
+                                .format(DateTimeFormatter.ofPattern(TIME_REGEX)))
         ));
         paragraph.add(getTableWithCashReceiptItemData(cashReceiptDto.getCashReceiptItemList()));
         paragraph.add(getTableWithTwoCells(YOUR_DISCOUNT,
                 String.format($_VALUE, cashReceiptDto.getTotalDiscount())));
         if (Objects.nonNull(cashReceiptDto.getDiscountCardDto())) {
-            paragraph.add(getTableWithTwoCells(String.format(CARD_NUMBER,
-                            cashReceiptDto.getDiscountCardDto().getId()),
-                    CARD_DISCOUNT + cashReceiptDto.getDiscountCardDto().getCardDiscountPercent()));
+            paragraph.add(getTableWithTwoCells(CARD_DISCOUNT,
+                    String.valueOf(cashReceiptDto
+                            .getDiscountCardDto()
+                            .getCardDiscountPercent())));
         }
         paragraph.add(getTableWithTwoCells(TOTAL, String.valueOf(cashReceiptDto.getTotalPrice())));
         paragraph.setTextAlignment(CENTER);
@@ -92,9 +94,7 @@ public class PdfCreatorImpl implements PdfCreator<CashReceiptDto> {
     }
 
     private Cell getNewCellWithOutBorders(String cellContent, int fontSize) {
-        return new Cell()
-                .add(new Paragraph(cellContent)
-                        .setFontSize(fontSize))
+        return new Cell().add(new Paragraph(cellContent).setFontSize(fontSize))
                 .setBorder(NO_BORDER);
     }
 

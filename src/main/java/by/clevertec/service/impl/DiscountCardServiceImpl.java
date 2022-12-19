@@ -21,38 +21,30 @@ public class DiscountCardServiceImpl implements DiscountCardService<DiscountCard
 
     @Override
     public void insert(DiscountCardDto discountCardDto) {
-        discountCardRepository
-                .save(discountCardMapper
-                        .mapToDiscountCard(discountCardDto));
+        discountCardRepository.save(discountCardMapper.mapToDiscountCard(discountCardDto));
     }
 
     @Override
     public DiscountCardDto getById(Long id) {
-        return discountCardMapper
-                .mapToDiscountCardDto(discountCardRepository
+        return discountCardMapper.mapToDiscountCardDto(discountCardRepository
                         .findById(id)
                         .orElseThrow(() -> new CannotFindEntityException(CANNOT_FIND_CARD_EXCEPTION, id)));
     }
 
     @Override
     public Page<DiscountCardDto> getAll(int pageNumber, int pageSize) {
-        Page<DiscountCard> discountCard = discountCardRepository
-                .findAll(PageRequest.of(pageNumber, pageSize));
-        return discountCard
-                .map(discountCardMapper::mapToDiscountCardDto);
+        Page<DiscountCard> discountCard = discountCardRepository.findAll(PageRequest.of(pageNumber, pageSize));
+        return discountCard.map(discountCardMapper::mapToDiscountCardDto);
     }
 
     @Override
     public void update(Long id, DiscountCardDto discountCardDto) {
-        DiscountCard discountCard = discountCardMapper
-                .mapToDiscountCard(getById(id));
-        discountCardMapper
-                .updateDiscountCardFromDiscountCardDto(discountCardDto, discountCard);
+        DiscountCard discountCard = discountCardMapper.mapToDiscountCard(getById(id));
+        discountCardMapper.updateDiscountCardFromDiscountCardDto(discountCardDto, discountCard);
     }
 
     @Override
     public void delete(Long id) {
-        discountCardRepository
-                .deleteById(id);
+        discountCardRepository.deleteById(id);
     }
 }

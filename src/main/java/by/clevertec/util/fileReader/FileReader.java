@@ -1,4 +1,4 @@
-package by.clevertec.service.fileReader;
+package by.clevertec.util.fileReader;
 
 import java.util.List;
 

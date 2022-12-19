@@ -1,4 +1,4 @@
-package by.clevertec.service.fileCreator;
+package by.clevertec.util.fileCreator;
 
 import java.io.IOException;
 

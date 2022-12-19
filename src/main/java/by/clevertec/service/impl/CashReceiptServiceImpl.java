@@ -1,6 +1,8 @@
 package by.clevertec.service.impl;
 
-import by.clevertec.service.fileReader.impl.TxtFileReaderImpl;
+import by.clevertec.service.DiscountCardService;
+import by.clevertec.service.ProductService;
+import by.clevertec.util.fileReader.impl.TxtFileReaderImpl;
 import by.clevertec.service.CashReceiptService;
 import by.clevertec.service.dto.CashReceiptDto;
 import by.clevertec.service.dto.CashReceiptItemDto;
@@ -10,7 +12,7 @@ import by.clevertec.service.dto.ProductDto;
 import by.clevertec.service.dto.ShopDto;
 import by.clevertec.service.exception.CannotFindEntityException;
 import by.clevertec.service.exception.EmptyItemListException;
-import by.clevertec.service.fileCreator.impl.PdfCreatorImpl;
+import by.clevertec.util.fileCreator.impl.PdfCreatorImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
@@ -31,8 +33,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CashReceiptServiceImpl implements CashReceiptService<CashReceiptDto> {
 
-    private final DiscountCardServiceImpl discountCardService;
-    private final ProductServiceImpl productService;
+    private final DiscountCardService<DiscountCardDto> discountCardService;
+    private final ProductService<ProductDto> productService;
     private final TxtFileReaderImpl fileReader;
     private final PdfCreatorImpl reader;
     private static final String CARD = "card";
@@ -74,21 +76,15 @@ public class CashReceiptServiceImpl implements CashReceiptService<CashReceiptDto
 
       for (String str:
               fileStrings) {
-          str = str
-                  .replaceAll(SPECIAL_SYMBOLS_REGEXP, EMPTY_STRING);
-          String[] substring = str
-                  .split(EQUALS_DELIMITER);
-          if (substring[NUMBER_0]
-                  .equals(CARD)){
-              cardStringId
-                      .add(substring[NUMBER_1]);
+          str = str.replaceAll(SPECIAL_SYMBOLS_REGEXP, EMPTY_STRING);
+          String[] substring = str.split(EQUALS_DELIMITER);
+          if (substring[NUMBER_0].equals(CARD)){
+              cardStringId.add(substring[NUMBER_1]);
           } else if(pattern
                   .matcher(substring[NUMBER_0])
                   .matches()) {
-              for (int i = NUMBER_0; i < Integer
-                      .parseInt(substring[NUMBER_1]); i++) {
-                  productStringId
-                          .add(substring[NUMBER_0]);
+              for (int i = NUMBER_0; i < Integer.parseInt(substring[NUMBER_1]); i++) {
+                  productStringId.add(substring[NUMBER_0]);
               }
           }
       }
@@ -122,13 +118,10 @@ public class CashReceiptServiceImpl implements CashReceiptService<CashReceiptDto
                 .setShopDto(new ShopDto(SHOP_NAME, SHOP_ADDRESS, SHOP_PHONE));
 
         if (discountCardDto != null) {
-            cashReceiptDto
-                    .setDiscountCardDto(discountCardDto);
-            cashReceiptDto
-                    .setCashReceiptItemList(getAllCashReceiptItemList(productQtyMap, discountCardDto));
+            cashReceiptDto.setDiscountCardDto(discountCardDto);
+            cashReceiptDto.setCashReceiptItemList(getAllCashReceiptItemList(productQtyMap, discountCardDto));
         } else {
-            cashReceiptDto
-                    .setCashReceiptItemList(getAllCashReceiptItemList(productQtyMap, null));
+            cashReceiptDto.setCashReceiptItemList(getAllCashReceiptItemList(productQtyMap, null));
         }
         cashReceiptDto
                 .setTotalDiscount(getRoundDoubleValue(getTotalDiscount(cashReceiptDto
@@ -145,8 +138,7 @@ public class CashReceiptServiceImpl implements CashReceiptService<CashReceiptDto
 
     private void createCashReceiptFile(CashReceiptDto cashReceiptDto) {
         try {
-            reader
-                    .createFile(cashReceiptDto);
+            reader.createFile(cashReceiptDto);
         } catch (IOException exception) {
             System.out.println(CANNOT_WRITE_IN_PDF_ERROR);
         }
@@ -212,8 +204,7 @@ public class CashReceiptServiceImpl implements CashReceiptService<CashReceiptDto
     }
 
     private Double getRoundDoubleValue(Double value) {
-        return Math
-                .ceil(value * SCALE) / SCALE;
+        return Math.ceil(value * SCALE) / SCALE;
     }
 }
 

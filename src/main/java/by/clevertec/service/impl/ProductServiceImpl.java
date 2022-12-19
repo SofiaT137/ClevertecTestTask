@@ -21,38 +21,29 @@ public class ProductServiceImpl implements ProductService<ProductDto> {
 
     @Override
     public void insert(ProductDto productDto) {
-        productRepository
-                .save(productMapper
-                        .mapToProduct(productDto));
+        productRepository.save(productMapper.mapToProduct(productDto));
     }
     @Override
     public ProductDto getById(Long id) {
-        return productMapper
-                .mapToProductDto(productRepository
+        return productMapper.mapToProductDto(productRepository
                         .findById(id)
                         .orElseThrow(() -> new CannotFindEntityException(CANNOT_FIND_PRODUCT_EXCEPTION, id)));
     }
 
     @Override
     public Page<ProductDto> getAll(int pageNumber, int pageSize) {
-        Page<Product> products = productRepository
-                .findAll(PageRequest
-                        .of(pageNumber, pageSize));
-        return products
-                .map(productMapper::mapToProductDto);
+        Page<Product> products = productRepository.findAll(PageRequest.of(pageNumber, pageSize));
+        return products.map(productMapper::mapToProductDto);
     }
 
     @Override
     public void update(Long id, ProductDto productDto) {
-        Product product = productMapper
-                .mapToProduct(getById(id));
-        productMapper
-                .updateProductFromProductDto(productDto, product);
+        Product product = productMapper.mapToProduct(getById(id));
+        productMapper.updateProductFromProductDto(productDto, product);
     }
 
     @Override
     public void delete(Long id) {
-        productRepository
-                .deleteById(id);
+        productRepository.deleteById(id);
     }
 }
