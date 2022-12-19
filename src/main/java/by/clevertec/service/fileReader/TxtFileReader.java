@@ -1,4 +1,4 @@
-package by.clevertec.service.reader;
+package by.clevertec.service.fileReader;
 
 public interface TxtFileReader extends FileReader{
 }

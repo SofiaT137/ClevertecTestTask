@@ -1,4 +1,4 @@
-package by.clevertec.service.reader.impl;
+package by.clevertec.service.fileReader.impl;
 
 import org.springframework.stereotype.Component;
 
