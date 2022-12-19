@@ -4,6 +4,7 @@ import by.clevertec.persistence.entity.DiscountCard;
 import by.clevertec.persistence.repository.DiscountCardRepository;
 import by.clevertec.service.DiscountCardService;
 import by.clevertec.service.dto.DiscountCardDto;
+import by.clevertec.service.exception.CannotFindEntity;
 import by.clevertec.service.mapper.DiscountCardMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class DiscountCardServiceImpl implements DiscountCardService<DiscountCardDto> {
+
+    private static final String CANNOT_FIND_CARD_EXCEPTION = "Cannot find the discount card with id = ";
     private final DiscountCardRepository discountCardRepository;
     private final DiscountCardMapper discountCardMapper;
 
@@ -28,23 +31,28 @@ public class DiscountCardServiceImpl implements DiscountCardService<DiscountCard
         return discountCardMapper
                 .mapToDiscountCardDto(discountCardRepository
                         .findById(id)
-                        .orElseThrow(RuntimeException::new));
+                        .orElseThrow(() -> new CannotFindEntity(CANNOT_FIND_CARD_EXCEPTION, id)));
     }
 
     @Override
     public Page<DiscountCardDto> getAll(int pageNumber, int pageSize) {
-        Page<DiscountCard> discountCard = discountCardRepository.findAll(PageRequest.of(pageNumber, pageSize));
-        return discountCard.map(discountCardMapper::mapToDiscountCardDto);
+        Page<DiscountCard> discountCard = discountCardRepository
+                .findAll(PageRequest.of(pageNumber, pageSize));
+        return discountCard
+                .map(discountCardMapper::mapToDiscountCardDto);
     }
 
     @Override
     public void update(Long id, DiscountCardDto discountCardDto) {
-        DiscountCard discountCard = discountCardMapper.mapToDiscountCard(getById(id));
-        discountCardMapper.updateDiscountCardFromDiscountCardDto(discountCardDto, discountCard);
+        DiscountCard discountCard = discountCardMapper
+                .mapToDiscountCard(getById(id));
+        discountCardMapper
+                .updateDiscountCardFromDiscountCardDto(discountCardDto, discountCard);
     }
 
     @Override
     public void delete(Long id) {
-        discountCardRepository.deleteById(id);
+        discountCardRepository
+                .deleteById(id);
     }
 }

@@ -8,7 +8,7 @@ import by.clevertec.service.dto.CashierDto;
 import by.clevertec.service.dto.DiscountCardDto;
 import by.clevertec.service.dto.ProductDto;
 import by.clevertec.service.dto.ShopDto;
-import by.clevertec.service.exception.CannotFindDiscountCardException;
+import by.clevertec.service.exception.CannotFindEntity;
 import by.clevertec.service.exception.EmptyItemListException;
 import by.clevertec.service.fileCreator.impl.PdfCreatorImpl;
 import lombok.RequiredArgsConstructor;
@@ -48,8 +48,7 @@ public class CashReceiptServiceImpl implements CashReceiptService<CashReceiptDto
     private static final String SHOP_PHONE = "+375(17) 362-17-60";
     private static final String CANNOT_WRITE_IN_PDF_ERROR = "Cannot write in pdf!";
     private static final String EMPTY_LIST_ERROR = "You transferred an empty items list! Cash Receipt cannot be empty!";
-    private static final String CANNOT_FIND_CARD_EXCEPTION = "Cannot find the card with transferred card id";
-//    private static final String CANNOT_FIND_PRODUCT_EXCEPTION = "Cannot find the product with transferred card id";
+    private static final String CANNOT_FIND_CARD_EXCEPTION = "Cannot find the discount card with max value!";
     private static final double SCALE = Math.pow(10, 2);
     private static final String POSITIVE_INTEGER_NUMBER_REGEX = "^[1-9]\\d*$";
     private static final String SPECIAL_SYMBOLS_REGEXP = "[\r\n]";
@@ -75,13 +74,21 @@ public class CashReceiptServiceImpl implements CashReceiptService<CashReceiptDto
 
       for (String str:
               fileStrings) {
-          str = str.replaceAll(SPECIAL_SYMBOLS_REGEXP, EMPTY_STRING);
-          String[] substring = str.split(EQUALS_DELIMITER);
-          if (substring[NUMBER_0].equals(CARD)){
-              cardStringId.add(substring[NUMBER_1]);
-          } else if(pattern.matcher(substring[NUMBER_0]).matches()) {
-              for (int i = NUMBER_0; i < Integer.parseInt(substring[NUMBER_1]); i++) {
-                  productStringId.add(substring[NUMBER_0]);
+          str = str
+                  .replaceAll(SPECIAL_SYMBOLS_REGEXP, EMPTY_STRING);
+          String[] substring = str
+                  .split(EQUALS_DELIMITER);
+          if (substring[NUMBER_0]
+                  .equals(CARD)){
+              cardStringId
+                      .add(substring[NUMBER_1]);
+          } else if(pattern
+                  .matcher(substring[NUMBER_0])
+                  .matches()) {
+              for (int i = NUMBER_0; i < Integer
+                      .parseInt(substring[NUMBER_1]); i++) {
+                  productStringId
+                          .add(substring[NUMBER_0]);
               }
           }
       }
@@ -117,13 +124,17 @@ public class CashReceiptServiceImpl implements CashReceiptService<CashReceiptDto
         if (discountCardDto != null) {
             cashReceiptDto
                     .setDiscountCardDto(discountCardDto);
-            cashReceiptDto.setCashReceiptItemList(getAllCashReceiptItemList(productQtyMap, discountCardDto));
+            cashReceiptDto
+                    .setCashReceiptItemList(getAllCashReceiptItemList(productQtyMap, discountCardDto));
         } else {
-            cashReceiptDto.setCashReceiptItemList(getAllCashReceiptItemList(productQtyMap, null));
+            cashReceiptDto
+                    .setCashReceiptItemList(getAllCashReceiptItemList(productQtyMap, null));
         }
-        cashReceiptDto.setTotalDiscount(getRoundDoubleValue(getTotalDiscount(cashReceiptDto
+        cashReceiptDto
+                .setTotalDiscount(getRoundDoubleValue(getTotalDiscount(cashReceiptDto
                 .getCashReceiptItemList())));
-        cashReceiptDto.setTotalPrice(getRoundDoubleValue(getTotalPrice(cashReceiptDto
+        cashReceiptDto
+                .setTotalPrice(getRoundDoubleValue(getTotalPrice(cashReceiptDto
                 .getCashReceiptItemList())));
 
         createCashReceiptFile(cashReceiptDto);
@@ -134,7 +145,8 @@ public class CashReceiptServiceImpl implements CashReceiptService<CashReceiptDto
 
     private void createCashReceiptFile(CashReceiptDto cashReceiptDto) {
         try {
-            reader.createFile(cashReceiptDto);
+            reader
+                    .createFile(cashReceiptDto);
         } catch (IOException exception) {
             System.out.println(CANNOT_WRITE_IN_PDF_ERROR);
         }
@@ -146,7 +158,7 @@ public class CashReceiptServiceImpl implements CashReceiptService<CashReceiptDto
                 .map(cardId -> discountCardService
                         .getById(Long.valueOf(cardId)))
                         .max(Comparator.comparing(DiscountCardDto::getCardDiscountPercent))
-                .orElseThrow(() ->new CannotFindDiscountCardException(CANNOT_FIND_CARD_EXCEPTION));
+                .orElseThrow(() ->new CannotFindEntity(CANNOT_FIND_CARD_EXCEPTION));
     }
 
     private Map<ProductDto, Long> findAllItemsWithTheirQty(List<String> listWithProductsId) {
@@ -200,7 +212,8 @@ public class CashReceiptServiceImpl implements CashReceiptService<CashReceiptDto
     }
 
     private Double getRoundDoubleValue(Double value) {
-        return Math.ceil(value * SCALE) / SCALE;
+        return Math
+                .ceil(value * SCALE) / SCALE;
     }
 }
 
