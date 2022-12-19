@@ -8,7 +8,7 @@ import by.clevertec.service.dto.CashierDto;
 import by.clevertec.service.dto.DiscountCardDto;
 import by.clevertec.service.dto.ProductDto;
 import by.clevertec.service.dto.ShopDto;
-import by.clevertec.service.exception.CannotFindEntity;
+import by.clevertec.service.exception.CannotFindEntityException;
 import by.clevertec.service.exception.EmptyItemListException;
 import by.clevertec.service.fileCreator.impl.PdfCreatorImpl;
 import lombok.RequiredArgsConstructor;
@@ -158,7 +158,7 @@ public class CashReceiptServiceImpl implements CashReceiptService<CashReceiptDto
                 .map(cardId -> discountCardService
                         .getById(Long.valueOf(cardId)))
                         .max(Comparator.comparing(DiscountCardDto::getCardDiscountPercent))
-                .orElseThrow(() ->new CannotFindEntity(CANNOT_FIND_CARD_EXCEPTION));
+                .orElseThrow(() ->new CannotFindEntityException(CANNOT_FIND_CARD_EXCEPTION));
     }
 
     private Map<ProductDto, Long> findAllItemsWithTheirQty(List<String> listWithProductsId) {

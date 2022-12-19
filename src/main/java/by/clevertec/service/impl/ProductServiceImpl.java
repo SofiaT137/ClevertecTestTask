@@ -4,7 +4,7 @@ import by.clevertec.persistence.entity.Product;
 import by.clevertec.persistence.repository.ProductRepository;
 import by.clevertec.service.ProductService;
 import by.clevertec.service.dto.ProductDto;
-import by.clevertec.service.exception.CannotFindEntity;
+import by.clevertec.service.exception.CannotFindEntityException;
 import by.clevertec.service.mapper.ProductMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -30,7 +30,7 @@ public class ProductServiceImpl implements ProductService<ProductDto> {
         return productMapper
                 .mapToProductDto(productRepository
                         .findById(id)
-                        .orElseThrow(() -> new CannotFindEntity(CANNOT_FIND_PRODUCT_EXCEPTION, id)));
+                        .orElseThrow(() -> new CannotFindEntityException(CANNOT_FIND_PRODUCT_EXCEPTION, id)));
     }
 
     @Override

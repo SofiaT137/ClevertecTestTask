@@ -4,7 +4,7 @@ import by.clevertec.persistence.entity.DiscountCard;
 import by.clevertec.persistence.repository.DiscountCardRepository;
 import by.clevertec.service.DiscountCardService;
 import by.clevertec.service.dto.DiscountCardDto;
-import by.clevertec.service.exception.CannotFindEntity;
+import by.clevertec.service.exception.CannotFindEntityException;
 import by.clevertec.service.mapper.DiscountCardMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -31,7 +31,7 @@ public class DiscountCardServiceImpl implements DiscountCardService<DiscountCard
         return discountCardMapper
                 .mapToDiscountCardDto(discountCardRepository
                         .findById(id)
-                        .orElseThrow(() -> new CannotFindEntity(CANNOT_FIND_CARD_EXCEPTION, id)));
+                        .orElseThrow(() -> new CannotFindEntityException(CANNOT_FIND_CARD_EXCEPTION, id)));
     }
 
     @Override
