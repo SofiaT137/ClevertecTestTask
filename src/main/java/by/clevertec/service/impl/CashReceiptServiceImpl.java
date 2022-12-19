@@ -1,20 +1,15 @@
 package by.clevertec.service.impl;
 
-import by.clevertec.persistence.entity.DiscountCard;
-import by.clevertec.persistence.entity.Product;
-import by.clevertec.persistence.repository.DiscountCardRepository;
-import by.clevertec.persistence.repository.ProductRepository;
 import by.clevertec.reader.impl.TxtFileReaderImpl;
 import by.clevertec.service.CashReceiptService;
 import by.clevertec.service.dto.CashReceiptDto;
 import by.clevertec.service.dto.CashReceiptItemDto;
 import by.clevertec.service.dto.CashierDto;
 import by.clevertec.service.dto.DiscountCardDto;
+import by.clevertec.service.dto.ProductDto;
 import by.clevertec.service.dto.ShopDto;
 import by.clevertec.service.exception.CannotFindDiscountCardException;
-import by.clevertec.service.exception.CannotFindProductException;
 import by.clevertec.service.exception.EmptyItemListException;
-import by.clevertec.service.mapper.DiscountCardMapper;
 import by.clevertec.service.fileCreator.impl.PdfCreatorImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -35,9 +30,9 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class CashReceiptServiceImpl implements CashReceiptService<CashReceiptDto> {
-    private final DiscountCardRepository cardRepository;
-    private final ProductRepository productRepository;
-    private final DiscountCardMapper discountCardMapper;
+
+    private final DiscountCardServiceImpl discountCardService;
+    private final ProductServiceImpl productService;
     private final TxtFileReaderImpl fileReader;
     private final PdfCreatorImpl reader;
     private static final String CARD = "card";
@@ -54,7 +49,7 @@ public class CashReceiptServiceImpl implements CashReceiptService<CashReceiptDto
     private static final String CANNOT_WRITE_IN_PDF_ERROR = "Cannot write in pdf!";
     private static final String EMPTY_LIST_ERROR = "You transferred an empty items list! Cash Receipt cannot be empty!";
     private static final String CANNOT_FIND_CARD_EXCEPTION = "Cannot find the card with transferred card id";
-    private static final String CANNOT_FIND_PRODUCT_EXCEPTION = "Cannot find the product with transferred card id";
+//    private static final String CANNOT_FIND_PRODUCT_EXCEPTION = "Cannot find the product with transferred card id";
     private static final double SCALE = Math.pow(10, 2);
     private static final String POSITIVE_INTEGER_NUMBER_REGEX = "^[1-9]\\d*$";
     private static final String SPECIAL_SYMBOLS_REGEXP = "[\r\n]";
@@ -100,19 +95,18 @@ public class CashReceiptServiceImpl implements CashReceiptService<CashReceiptDto
             throw new EmptyItemListException(EMPTY_LIST_ERROR);
         }
 
-        Map<Product, Long> productQtyMap = findAllItemsWithTheirQty(transferredProductIdList);
+        Map<ProductDto, Long> productQtyMap = findAllItemsWithTheirQty(transferredProductIdList);
 
         if (transferredCardList == null) {
             return createCashReceipt(productQtyMap, null);
         }else{
-            DiscountCardDto discountCardDto = discountCardMapper
-                    .mapToDiscountCardDto(findDiscountCard(transferredCardList));
+            DiscountCardDto discountCardDto = findDiscountCard(transferredCardList);
             return createCashReceipt(productQtyMap, discountCardDto);
         }
     }
 
 
-    private CashReceiptDto createCashReceipt(Map<Product,Long> productQtyMap, DiscountCardDto discountCardDto) {
+    private CashReceiptDto createCashReceipt(Map<ProductDto,Long> productQtyMap, DiscountCardDto discountCardDto) {
 
         CashReceiptDto cashReceiptDto = new CashReceiptDto()
                 .setCashierDto(new CashierDto(CASHIER_ID))
@@ -146,26 +140,24 @@ public class CashReceiptServiceImpl implements CashReceiptService<CashReceiptDto
         }
     }
 
-    private DiscountCard findDiscountCard(List<String> listWithCardId) {
+    private DiscountCardDto findDiscountCard(List<String> listWithCardId) {
         return listWithCardId
                 .stream()
-                .map(cardId -> cardRepository
-                        .findById(Long.valueOf(cardId))
-                        .orElseThrow(() ->new CannotFindDiscountCardException(CANNOT_FIND_CARD_EXCEPTION)))
-                .max(Comparator.comparing(DiscountCard::getCardDiscountPercent))
+                .map(cardId -> discountCardService
+                        .getById(Long.valueOf(cardId)))
+                        .max(Comparator.comparing(DiscountCardDto::getCardDiscountPercent))
                 .orElseThrow(() ->new CannotFindDiscountCardException(CANNOT_FIND_CARD_EXCEPTION));
     }
 
-    private Map<Product, Long> findAllItemsWithTheirQty(List<String> listWithProductsId) {
+    private Map<ProductDto, Long> findAllItemsWithTheirQty(List<String> listWithProductsId) {
         return listWithProductsId
                 .stream()
-                .map(productId -> productRepository
-                        .findById(Long.valueOf(productId))
-                        .orElseThrow(()->new CannotFindProductException(CANNOT_FIND_PRODUCT_EXCEPTION)))
+                .map(productId -> productService
+                        .getById(Long.valueOf(productId)))
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
     }
 
-    private List<CashReceiptItemDto> getAllCashReceiptItemList(Map<Product, Long> mapWithItemsAndItemQty,
+    private List<CashReceiptItemDto> getAllCashReceiptItemList(Map<ProductDto, Long> mapWithItemsAndItemQty,
                                                                DiscountCardDto card) {
         return mapWithItemsAndItemQty
                 .entrySet()
@@ -175,12 +167,12 @@ public class CashReceiptServiceImpl implements CashReceiptService<CashReceiptDto
                 .collect(Collectors.toList());
     }
 
-    private CashReceiptItemDto getCashReceiptItem(Product product, Long productQuantity, DiscountCardDto card) {
+    private CashReceiptItemDto getCashReceiptItem(ProductDto product, Long productQuantity, DiscountCardDto card) {
         return new CashReceiptItemDto(product.getProductName(), productQuantity,
                 product.getPrice(), getTotalItemPrice(product, productQuantity, card));
     }
 
-    private double getTotalItemPrice(Product product, Long productQuantity, DiscountCardDto discountCard) {
+    private double getTotalItemPrice(ProductDto product, Long productQuantity, DiscountCardDto discountCard) {
         double price = product.getPrice() * productQuantity;
         if (product.getProductDiscountPercent() != NUMBER_0) {
             price *= ((double) (NUMBER_100  - product.getProductDiscountPercent()) /NUMBER_100);
