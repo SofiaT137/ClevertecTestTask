@@ -20,6 +20,6 @@ public class Product extends AbstractEntity<Long> {
     @Column(name = "product_price", nullable = false)
     private Double price;
 
-    @Column(name = "product_discount_percent")
+    @Column(name = "product_discount_percent",nullable = false)
     private Integer productDiscountPercent;
 }
