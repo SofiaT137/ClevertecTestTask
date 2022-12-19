@@ -1,6 +1,6 @@
 package by.clevertec.service.impl;
 
-import by.clevertec.reader.impl.TxtFileReaderImpl;
+import by.clevertec.service.reader.impl.TxtFileReaderImpl;
 import by.clevertec.service.CashReceiptService;
 import by.clevertec.service.dto.CashReceiptDto;
 import by.clevertec.service.dto.CashReceiptItemDto;

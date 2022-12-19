@@ -1,4 +1,4 @@
-package by.clevertec.reader;
+package by.clevertec.service.reader;
 
 import java.util.List;
 
