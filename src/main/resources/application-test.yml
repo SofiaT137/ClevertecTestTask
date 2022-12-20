@@ -3,6 +3,9 @@ spring:
     url: jdbc:h2:mem:test;DB_CLOSE_ON_EXIT=FALSE
     username:
     password:
+  sql:
+    init:
+      data-locations: classpath:data-test.sql
   jpa:
     defer-datasource-initialization: true
     hibernate:
