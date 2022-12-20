@@ -8,6 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Class "TxtFileReaderImpl" is an implementation of the TxtFileReader interface
+ * The class helps to read .txt files
+ */
 @Component
 public class TxtFileReaderImpl {
 

@@ -22,6 +22,10 @@ import static com.itextpdf.io.font.constants.StandardFonts.TIMES_ROMAN;
 import static com.itextpdf.layout.borders.Border.NO_BORDER;
 import static com.itextpdf.layout.properties.TextAlignment.CENTER;
 
+/**
+ * Class "PdfCreatorImpl" is an implementation of the PdfCreator interface
+ * The class helps to create .pdf file for the "CashReceiptServiceDto" class
+ */
 @Component
 public class PdfCreatorImpl implements PdfCreator<CashReceiptDto> {
     private static final String PATH = "cashReceipt.pdf";
