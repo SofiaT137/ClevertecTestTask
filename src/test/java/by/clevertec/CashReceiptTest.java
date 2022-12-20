@@ -90,16 +90,16 @@ public class CashReceiptTest {
                 () -> assertEquals(Objects.requireNonNull(cashReceiptDtoResponseEntity
                                 .getBody())
                         .getCashierDto(), CASHIER_DTO_TEST),
-                () -> assertEquals(3, Objects.requireNonNull(cashReceiptDtoResponseEntity
+                () -> assertEquals(2, Objects.requireNonNull(cashReceiptDtoResponseEntity
                                 .getBody())
                         .getCashReceiptItemList().size()),
                 () -> assertEquals(1, Objects.requireNonNull(cashReceiptDtoResponseEntity
                                 .getBody())
                         .getDiscountCardDto().getId()),
-                () -> assertEquals(63.84, Objects.requireNonNull(cashReceiptDtoResponseEntity
+                () -> assertEquals(21.34, Objects.requireNonNull(cashReceiptDtoResponseEntity
                                 .getBody())
                         .getTotalPrice()),
-                () -> assertEquals(5.32, Objects.requireNonNull(cashReceiptDtoResponseEntity
+                () -> assertEquals(1.32, Objects.requireNonNull(cashReceiptDtoResponseEntity
                                 .getBody())
                         .getTotalDiscount()));
     }
