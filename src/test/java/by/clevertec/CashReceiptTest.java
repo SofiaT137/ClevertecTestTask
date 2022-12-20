@@ -101,7 +101,7 @@ public class CashReceiptTest {
                         .getTotalPrice()),
                 () -> assertEquals(5.32, Objects.requireNonNull(cashReceiptDtoResponseEntity
                                 .getBody())
-                        .getTotalDiscount()));;
+                        .getTotalDiscount()));
     }
     @Test
     void checkIfTransferredEmptyListTest() {
