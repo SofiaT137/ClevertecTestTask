@@ -8,6 +8,9 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
+/**
+ * Class "DiscountCardMapper" presents mapper class for the "DiscountCard" entity
+ */
 @Mapper(componentModel = "spring")
 public interface DiscountCardMapper {
     @Mapping(target = "id", ignore = true)

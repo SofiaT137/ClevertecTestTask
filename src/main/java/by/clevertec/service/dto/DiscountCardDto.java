@@ -4,6 +4,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+/**
+ * Class "DiscountCardDto" helps to create the "DiscountCardDto" entity
+ */
 @Data
 @Accessors(chain = true)
 @NoArgsConstructor

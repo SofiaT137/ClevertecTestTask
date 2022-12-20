@@ -4,6 +4,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+/**
+ * Class "CashReceiptItemDto" helps to create the "CashReceiptItemDto" entity
+ */
 @Data
 @Accessors(chain = true)
 @NoArgsConstructor

@@ -30,6 +30,10 @@ import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+/**
+ * Class "CashReceiptServiceImpl" is an implementation of the CashReceiptService interface
+ * The class presents service logic layer for the "CashReceiptServiceDto" class
+ */
 @Service
 @RequiredArgsConstructor
 public class CashReceiptServiceImpl implements CashReceiptService<CashReceiptDto> {

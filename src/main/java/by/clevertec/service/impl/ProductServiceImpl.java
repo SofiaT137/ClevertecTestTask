@@ -14,6 +14,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+
+/**
+ * Class "ProductServiceImpl" is an implementation of the ProductService interface
+ * The class presents service logic layer for the "Product" entity
+ */
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService<ProductDto> {

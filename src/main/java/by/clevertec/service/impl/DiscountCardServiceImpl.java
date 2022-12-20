@@ -14,6 +14,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+/**
+ * Class "DiscountCardServiceImpl" is an implementation of the DiscountCardService interface
+ * The class presents service logic layer for the "DiscountCard" entity
+ */
 @Service
 @RequiredArgsConstructor
 public class DiscountCardServiceImpl implements DiscountCardService<DiscountCardDto> {

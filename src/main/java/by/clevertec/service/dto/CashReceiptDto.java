@@ -9,6 +9,9 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+/**
+ * Class "CashReceiptDto" helps to create the "CashReceiptDto" entity
+ */
 @Data
 @Accessors(chain = true)
 @NoArgsConstructor
