@@ -1,6 +1,7 @@
 package by.clevertec.web.exception;
 
 import by.clevertec.service.exception.CannotFindEntityException;
+import by.clevertec.service.exception.CannotWriteInPdfException;
 import by.clevertec.service.exception.EmptyItemListException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,8 +9,7 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
-import static by.clevertec.web.exception.ExceptionCodes.CANNOT_FIND_ENTITY;
-import static by.clevertec.web.exception.ExceptionCodes.EMPTY_ITEM_LIST;
+import static by.clevertec.web.exception.ExceptionCodes.*;
 
 @RestControllerAdvice
 public class ExceptionHandler {
@@ -31,6 +31,15 @@ public class ExceptionHandler {
                 .setExceptionMessage(exceptionMessage)
                 .setExceptionCode(EMPTY_ITEM_LIST.getCodeNumber());
         return new ResponseEntity<>(exceptionEntity, HttpStatus.NOT_ACCEPTABLE);
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(CannotWriteInPdfException.class)
+    public ResponseEntity<Object> CannotWriteInPdfExceptionHandling(CannotWriteInPdfException exception) {
+        String exceptionMessage = exception.getMessage();
+        ExceptionEntity exceptionEntity = new ExceptionEntity()
+                .setExceptionMessage(exceptionMessage)
+                .setExceptionCode(CANNOT_WRITE_IN_PDF.getCodeNumber());
+        return new ResponseEntity<>(exceptionEntity, HttpStatus.BAD_REQUEST);
     }
 
     @org.springframework.web.bind.annotation.ExceptionHandler(HttpRequestMethodNotSupportedException.class)

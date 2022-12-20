@@ -2,6 +2,7 @@ package by.clevertec.service.impl;
 
 import by.clevertec.service.DiscountCardService;
 import by.clevertec.service.ProductService;
+import by.clevertec.service.exception.CannotWriteInPdfException;
 import by.clevertec.util.fileReader.impl.TxtFileReaderImpl;
 import by.clevertec.service.CashReceiptService;
 import by.clevertec.service.dto.CashReceiptDto;
@@ -48,7 +49,7 @@ public class CashReceiptServiceImpl implements CashReceiptService<CashReceiptDto
     private static final String SHOP_NAME = "SUPERMARKET 123";
     private static final String SHOP_ADDRESS = "12, MILKY WAY Galaxy/ Earth";
     private static final String SHOP_PHONE = "+375(17) 362-17-60";
-    private static final String CANNOT_WRITE_IN_PDF_ERROR = "Cannot write in pdf!";
+    private static final String CANNOT_WRITE_IN_PDF_ERROR = "Cannot write in pdf! Reason: ";
     private static final String EMPTY_LIST_ERROR = "You transferred an empty items list! Cash Receipt cannot be empty!";
     private static final String CANNOT_FIND_CARD_EXCEPTION = "Cannot find the discount card with max value!";
     private static final double SCALE = Math.pow(10, 2);
@@ -143,7 +144,7 @@ public class CashReceiptServiceImpl implements CashReceiptService<CashReceiptDto
         try {
             reader.createFile(cashReceiptDto);
         } catch (IOException exception) {
-            System.out.println(CANNOT_WRITE_IN_PDF_ERROR);
+            throw new CannotWriteInPdfException(CANNOT_WRITE_IN_PDF_ERROR + exception.getMessage());
         }
     }
 

@@ -5,8 +5,8 @@ import lombok.Getter;
 
 @AllArgsConstructor
 public enum ExceptionCodes {
-
     CANNOT_FIND_ENTITY("404001"),
+    CANNOT_WRITE_IN_PDF("400001"),
     EMPTY_ITEM_LIST("406001");
 
     @Getter

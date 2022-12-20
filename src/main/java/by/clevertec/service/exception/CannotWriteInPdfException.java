@@ -1,7 +1,7 @@
 package by.clevertec.service.exception;
 
-public class CannotFindFileByTransferredPathException extends RuntimeException  {
-    public CannotFindFileByTransferredPathException(String message) {
+public class CannotWriteInPdfException extends RuntimeException  {
+    public CannotWriteInPdfException(String message) {
         super(message);
     }
 }
