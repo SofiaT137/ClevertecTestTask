@@ -14,12 +14,15 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Objects;
 
+import static by.clevertec.web.exception.ExceptionCodes.EMPTY_ITEM_LIST;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -99,5 +102,16 @@ public class CashReceiptTest {
                 () -> assertEquals(5.32, Objects.requireNonNull(cashReceiptDtoResponseEntity
                                 .getBody())
                         .getTotalDiscount()));;
+    }
+    @Test
+    void checkIfTransferredEmptyListTest() {
+        HttpClientErrorException exception = assertThrows(HttpClientErrorException.class,
+                () -> restTemplate.exchange(baseURL,
+                        HttpMethod.GET, new HttpEntity<>(headers), CashReceiptDto.class));
+        assertAll(
+                () -> assertTrue(exception.getResponseBodyAsString()
+                        .contains("You transferred an empty items list! Cash Receipt cannot be empty!")),
+                () -> assertTrue(exception.getResponseBodyAsString().contains(EMPTY_ITEM_LIST.getCodeNumber()))
+        );
     }
 }
