@@ -11,7 +11,6 @@ Spring boot REST application is using for:
 
 ## How to use
 
-Docker-compose.yml file contains all the needed for running this application using Docker.
 First, fill the database using data.sql file. After you can use application by its entry points.
 
 ## Application entry points
