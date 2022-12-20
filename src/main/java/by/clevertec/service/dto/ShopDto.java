@@ -1,12 +1,16 @@
 package by.clevertec.service.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 @Data
 @Accessors(chain = true)
+@NoArgsConstructor
+@AllArgsConstructor
 public class ShopDto {
-    private final String shopName;
-    private final String shopAddress;
-    private final String shopPhone;
+    private String shopName;
+    private String shopAddress;
+    private String shopPhone;
 }

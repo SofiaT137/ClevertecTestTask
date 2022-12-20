@@ -1,10 +1,14 @@
 package by.clevertec.service.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 @Data
 @Accessors(chain = true)
+@NoArgsConstructor
+@AllArgsConstructor
 public class CashierDto {
-    private final Long cashierId;
+    private Long cashierId;
 }

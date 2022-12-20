@@ -1,13 +1,17 @@
 package by.clevertec.service.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 @Data
 @Accessors(chain = true)
+@NoArgsConstructor
+@AllArgsConstructor
 public class CashReceiptItemDto {
-    private final String productName;
-    private final Long productQuantity;
-    private final Double productPrice;
-    private final Double productTotalPrice;
+    private String productName;
+    private Long productQuantity;
+    private Double productPrice;
+    private Double productTotalPrice;
 }
