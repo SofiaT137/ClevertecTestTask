@@ -7,6 +7,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+/**
+ * The "Product" class extends "AbstractEntity" class and presents creation of the "Product" entity
+ */
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)

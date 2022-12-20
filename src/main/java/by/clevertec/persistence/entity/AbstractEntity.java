@@ -8,6 +8,9 @@ import lombok.Data;
 
 import java.io.Serializable;
 
+/**
+ * The abstract class "AbstractEntity" presents creation of the abstract entity
+ */
 @MappedSuperclass
 @Data
 public abstract class AbstractEntity <K extends Serializable> {
