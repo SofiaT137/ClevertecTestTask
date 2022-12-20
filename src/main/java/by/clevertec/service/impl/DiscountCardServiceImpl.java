@@ -6,10 +6,13 @@ import by.clevertec.service.DiscountCardService;
 import by.clevertec.service.dto.DiscountCardDto;
 import by.clevertec.service.exception.CannotFindEntityException;
 import by.clevertec.service.mapper.DiscountCardMapper;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +23,7 @@ public class DiscountCardServiceImpl implements DiscountCardService<DiscountCard
     private final DiscountCardMapper discountCardMapper;
 
     @Override
+    @Transactional
     public void insert(DiscountCardDto discountCardDto) {
         discountCardRepository.save(discountCardMapper.mapToDiscountCard(discountCardDto));
     }
@@ -38,12 +42,15 @@ public class DiscountCardServiceImpl implements DiscountCardService<DiscountCard
     }
 
     @Override
+    @Transactional
     public void update(Long id, DiscountCardDto discountCardDto) {
-        DiscountCard discountCard = discountCardMapper.mapToDiscountCard(getById(id));
-        discountCardMapper.updateDiscountCardFromDiscountCardDto(discountCardDto, discountCard);
+        Optional<DiscountCard> discountCard = discountCardRepository.findById(id);
+        DiscountCard discountCard1 = discountCard.get();
+        discountCardMapper.updateDiscountCardFromDiscountCardDto(discountCardDto, discountCard1);
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         discountCardRepository.deleteById(id);
     }

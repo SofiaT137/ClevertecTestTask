@@ -112,10 +112,13 @@ public class CashReceiptServiceImpl implements CashReceiptService<CashReceiptDto
     private CashReceiptDto createCashReceipt(Map<ProductDto,Long> productQtyMap, DiscountCardDto discountCardDto) {
 
         CashReceiptDto cashReceiptDto = new CashReceiptDto()
-                .setCashierDto(new CashierDto(CASHIER_ID))
+                .setCashierDto(new CashierDto().setCashierId(CASHIER_ID))
                 .setCashReceiptDate(LocalDate.now())
                 .setCashReceiptTime(LocalTime.now())
-                .setShopDto(new ShopDto(SHOP_NAME, SHOP_ADDRESS, SHOP_PHONE));
+                .setShopDto(new ShopDto()
+                        .setShopName(SHOP_NAME)
+                        .setShopAddress(SHOP_ADDRESS)
+                        .setShopPhone(SHOP_PHONE));
 
         if (discountCardDto != null) {
             cashReceiptDto.setDiscountCardDto(discountCardDto);
@@ -172,8 +175,11 @@ public class CashReceiptServiceImpl implements CashReceiptService<CashReceiptDto
     }
 
     private CashReceiptItemDto getCashReceiptItem(ProductDto product, Long productQuantity, DiscountCardDto card) {
-        return new CashReceiptItemDto(product.getProductName(), productQuantity,
-                product.getPrice(), getTotalItemPrice(product, productQuantity, card));
+        return new CashReceiptItemDto()
+                .setProductName(product.getProductName())
+                .setProductQuantity(productQuantity)
+                .setProductPrice(product.getPrice())
+                .setProductTotalPrice(getTotalItemPrice(product,productQuantity,card));
     }
 
     private double getTotalItemPrice(ProductDto product, Long productQuantity, DiscountCardDto discountCard) {
