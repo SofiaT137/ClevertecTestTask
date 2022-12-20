@@ -3,6 +3,9 @@ package by.clevertec.web.exception;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+/**
+ * The "ExceptionCodes" enumeration is the enumeration of exception codes
+ */
 @AllArgsConstructor
 public enum ExceptionCodes {
     CANNOT_FIND_ENTITY("404001"),
