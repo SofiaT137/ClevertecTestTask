@@ -1,7 +1,6 @@
 package by.clevertec.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
@@ -13,7 +12,6 @@ import java.util.List;
 @Data
 @Accessors(chain = true)
 @NoArgsConstructor
-@AllArgsConstructor
 public class CashReceiptDto {
     private static final String DATE_REGEX = "yyyy/MM/dd";
     private static final String TIME_REGEX = "HH:mm:ss";
