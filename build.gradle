@@ -30,6 +30,7 @@ dependencies {
     implementation 'org.mapstruct:mapstruct:1.5.3.Final'
     implementation 'com.itextpdf:itext7-core:7.2.4'
     runtimeOnly 'org.postgresql:postgresql'
+    testImplementation 'com.h2database:h2:2.1.214'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
